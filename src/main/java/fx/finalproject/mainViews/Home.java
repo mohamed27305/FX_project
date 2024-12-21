@@ -33,7 +33,10 @@ public class Home implements UIClass {
         Button professorsControl = new Button("Professors Control");
         Button coursesControl = new Button("Course Control");
         Button accountsSetting = new Button("Account Setting");
-
+        studentsControl.setMinWidth(200);
+        professorsControl.setMinWidth(200);
+        coursesControl.setMinWidth(200);
+        accountsSetting.setMinWidth(200);
         body.addRow(0,studentsControl);
         body.addRow(1,professorsControl);
         body.addRow(2,coursesControl);
