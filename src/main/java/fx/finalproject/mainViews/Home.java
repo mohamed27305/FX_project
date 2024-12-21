@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class Home implements UIClass {
@@ -18,8 +17,6 @@ public class Home implements UIClass {
         this.navigator = navigator;
         setRoot();
     }
-
-
     private void setRoot(){
         root = new BorderPane();
         Label title = new Label("Welcome To The Control Panel");
@@ -62,7 +59,6 @@ public class Home implements UIClass {
         accountsSetting.setOnAction((var)-> navigator.navigateToAccountSettingControl());
 
     }
-
     @Override
     public BorderPane getRoot(){return root;}
 

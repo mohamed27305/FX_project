@@ -13,4 +13,6 @@ module fx.finalproject {
     opens fx.finalproject.mainViews to javafx.fxml;
     exports fx.finalproject.interfaces;
     opens fx.finalproject.interfaces to javafx.fxml;
+    opens fx.finalproject.model to javafx.base;
+
 }
