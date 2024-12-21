@@ -83,7 +83,6 @@ public class CoursesControl implements UIClass {
         footer.setAlignment(Pos.BOTTOM_RIGHT);
 
         courseTable = new TableView<>();
-
         TableColumn<Course, String> nameColumn = new TableColumn<>("course Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
         TableColumn<Course, String> idColumn = new TableColumn<>("Course Id");
