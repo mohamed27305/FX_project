@@ -4,10 +4,7 @@ import fx.finalproject.DataBase;
 import fx.finalproject.Navigator;
 import fx.finalproject.interfaces.UIClass;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -16,17 +13,14 @@ import javafx.scene.layout.VBox;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Objects;
 
 public class Login implements UIClass {
 
     private final Navigator navigator;
     private BorderPane root;
 
-    // region root nodes
-    private Button login;
-    private Label email;
     private TextField email_F;
-    private Label password;
     private PasswordField password_F;
     // endregion
 
@@ -48,18 +42,19 @@ public class Login implements UIClass {
 
         title.setId("title");// For css
 
-        email = new Label("Email: ");
+        Label email = new Label("Email: ");
         email_F = new TextField();
         email_F.setPromptText("Enter your email");
         body.add(header,0,0,2,1);
         body.addRow(1, email, email_F);
 
-        password = new Label("Password: ");
+        Label password = new Label("Password: ");
         password_F = new PasswordField();
         password_F.setPromptText("Enter your password");
-        body.addRow(2,password, password_F);
+        body.addRow(2, password, password_F);
 
-        login = new Button("Login");
+        // region root nodes
+        Button login = new Button("Login");
         login.setOnAction((var)-> loginAction());
 
         Label don_t_have_an_account = new Label("don't have an account?");
@@ -79,28 +74,34 @@ public class Login implements UIClass {
     public BorderPane getRoot() {return root;}
 
     private void loginAction(){
+        String email = email_F.getText();
+        String password = password_F.getText();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Authentication error");
+        if (Objects.equals(email, "")){
+            alert.setContentText("Email is required!");
+            alert.show();
+            return;
+        }
+        if (Objects.equals(password, "")){
+            alert.setContentText("Password is required!");
+            alert.show();
+            return;
+        }
         try {
             Connection con = DataBase.getConnect();
-            String query = "SELECT * FROM Admin";// WHERE Email = '"+email+"' AND Password = '"+password+"';" ;
-//            query = "SELECT * FROM Admin WHERE email = '" + email + "' AND Password = '" + password + "'";
-
+            String query = "SELECT * FROM Admin WHERE Email = '" + email + "' AND Password = '" + password + "'";
             assert con != null;
             Statement stmt= con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            System.out.println("res = "+rs);
-            con.close();
+            if(rs.next()){
+                navigator.navigateToHome();
+            }else{
+                alert.setContentText("Invalid email or password!");
+                alert.show();
+            }
         } catch (Exception e) {
             System.out.println("[-] Error "+e);
         }
-
-
-        String email = email_F.getText();
-        String password = password_F.getText();
-        System.out.println("Email: "+ email);
-        System.out.println("Password: "+ password);
-//        navigator.navigateToHome();
     }
-
-
 }
