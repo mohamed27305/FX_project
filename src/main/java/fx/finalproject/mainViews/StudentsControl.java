@@ -7,7 +7,6 @@ import fx.finalproject.model.Course;
 import fx.finalproject.model.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -25,16 +24,19 @@ public class StudentsControl implements UIClass {
     TextField newstudentId;
     TextField newstudentName;
     TextField studentId;
-    TextField addcourse;
+    TextField courseId;
     TextField removecourse;
     TableView<Student> studentTable;
     ObservableList<Student> data = FXCollections.observableArrayList();
+    TableView<Course> courseTable;
+    ObservableList<Course> courses = FXCollections.observableArrayList();
     Alert alert = new Alert(Alert.AlertType.ERROR);
 
     public StudentsControl(Navigator navigator) {
         this.navigator = navigator;
         setRoot();
         setData();
+
 
     }
 
@@ -60,6 +62,16 @@ public class StudentsControl implements UIClass {
         body.add(addStudent, 0, 0);
         body.add(newstudentId, 1, 0);
         body.add(newstudentName, 2, 0);
+
+        Button addCourse = new Button("add course");
+        addCourse.setOnAction((var)-> addCourse());
+        courseId = new TextField();
+        studentId = new TextField();
+        courseId.setPromptText("course Id");
+        studentId.setPromptText("student Id");
+        body.add(addCourse,0,1);
+        body.add(studentId,1,1);
+        body.add(courseId,2,1);
 
 
         Button back = new Button("Back");
@@ -132,6 +144,7 @@ public class StudentsControl implements UIClass {
         }
     }
 
+
     private void setData() {
         data.clear();
         try {
@@ -148,6 +161,44 @@ public class StudentsControl implements UIClass {
             System.out.println("Error " + e);
         }
     }
+    private void addCourse(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        String studentId = this.studentId.getText();
+        String courseId = this.courseId.getText();
+
+        if (studentId.isBlank() || studentId.isEmpty()){
+            alert.setContentText("Student id is required!");
+            alert.show();
+            return;
+        }
+        if (courseId.isBlank() || courseId.isEmpty()){
+            alert.setContentText("Course id is required!");
+            alert.show();
+            return;
+        }
+
+        try {
+            Connection con = DataBase.getConnect();
+            String query = String.format("INSERT INTO ENROLLED VALUES ('%s','%s')",studentId,courseId);
+            assert con != null;
+            Statement stmt= con.createStatement();
+            stmt.executeQuery(query);
+            con.close();
+            alert.setAlertType(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setContentText("Added new course to student!");
+            alert.show();
+            this.studentId.setText("");
+            this.courseId.setText("");
+        }
+        catch (Exception e) {
+            System.out.println("[-] Error "+e);
+            alert.setContentText("Error Can't add new course to student!");
+            alert.show();
+        }
+    }
+
 
     private void backAction() {
         navigator.navigateToHome();

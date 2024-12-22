@@ -20,5 +20,8 @@ public class Student {
     public String getStudentName() {
         return studentName.getValue();
     }
+    public void addcourse(String courseId){
+
+    }
 
 }

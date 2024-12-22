@@ -43,7 +43,7 @@ public class Navigator {
 
     public void navigateToStudentsControl() {
         StudentsControl studentsControl = new StudentsControl(this);
-        stage.setScene(new Scene(studentsControl.getRoot(),  800, 500));
+        stage.setScene(new Scene(studentsControl.getRoot(),  1000, 500));
         stage.show();
     }
 
