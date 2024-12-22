@@ -17,4 +17,8 @@ public class Student {
         this.studentName.setValue(studentName);
    }
 
+    public String getStudentName() {
+        return studentName.getValue();
+    }
+
 }
