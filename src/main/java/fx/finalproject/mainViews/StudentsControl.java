@@ -24,6 +24,7 @@ public class StudentsControl implements UIClass {
     TextField newstudentId;
     TextField newstudentName;
     TextField studentId;
+    TextField studentIdSearch;
     TextField courseId;
     TextField removecourse;
     TableView<Student> studentTable;
@@ -88,10 +89,31 @@ public class StudentsControl implements UIClass {
         studentTable.getColumns().add(idcolumn);
         studentTable.setItems(data);
 
+        courseTable = new TableView<>();
+        TableColumn<Course, String> nameCoursecolumn = new TableColumn<>("course name");
+        nameCoursecolumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
+        TableColumn<Course, String> idCoursecolumn = new TableColumn<>("course id");
+        idCoursecolumn.setCellValueFactory(new PropertyValueFactory<>("courseId"));
+        courseTable.getColumns().add(nameCoursecolumn);
+        courseTable.getColumns().add(idCoursecolumn);
+        courseTable.setItems(courses);
 
-        VBox right = new VBox(studentTable);
+        Button search = new Button("search");
+        search.setOnAction((var) -> setCourses());
+        studentIdSearch = new TextField();
+        studentIdSearch.setPromptText("search student");
+        body.add(search, 0,2);
+        body.add(studentIdSearch,1,2);
+
+        Button refresh = new Button("refresh");
+        refresh.setOnAction((var) -> setData());
+        body.add(refresh,3,3);
+
+
+        VBox right = new VBox(studentTable,courseTable);
         right.setSpacing(10);
         right.setAlignment(Pos.TOP_CENTER);
+
 
         root.setTop(header);
         root.setCenter(body);
@@ -199,7 +221,24 @@ public class StudentsControl implements UIClass {
         }
     }
 
-
+    private void setCourses() {
+        data.clear();
+        String studentIdSearch = this.studentIdSearch.getText();
+        try {
+            Connection con = DataBase.getConnect();
+            String query = String.format("SELECT Course.ID_course, Course.Name FROM ENROLLED JOIN Course ON ENROLLED.ID_course = Course.ID_course WHERE ENROLLED.ID_student = '%s'",studentIdSearch);
+            assert con != null;
+            Statement stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                courses.add(new Course(resultSet.getString(1), resultSet.getString(2)));
+            }
+            this.studentIdSearch.setText("");
+            con.close();
+        } catch (Exception e) {
+            System.out.println("Error " + e);
+        }
+    }
     private void backAction() {
         navigator.navigateToHome();
     }

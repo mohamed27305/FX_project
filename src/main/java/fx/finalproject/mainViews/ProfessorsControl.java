@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class ProfessorsControl implements UIClass {
@@ -26,6 +27,7 @@ public class ProfessorsControl implements UIClass {
     TextField profId;
     TextField courseId;
     TextField removecourse;
+    TextField profIdSearch;
     TableView<Professor> profTable;
     ObservableList<Professor> data = FXCollections.observableArrayList();
     TableView<Course> courseTable;
@@ -35,6 +37,7 @@ public class ProfessorsControl implements UIClass {
     public ProfessorsControl(Navigator navigator) {
         this.navigator = navigator;
         setRoot();
+        setData();
     }
 
     private void setRoot() {
@@ -87,7 +90,27 @@ public class ProfessorsControl implements UIClass {
         profTable.getColumns().add(idcolumn);
         profTable.setItems(data);
 
-        VBox right = new VBox(profTable);
+        courseTable = new TableView<>();
+        TableColumn<Course, String> nameCoursecolumn = new TableColumn<>("course name");
+        nameCoursecolumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
+        TableColumn<Course, String> idCoursecolumn = new TableColumn<>("course id");
+        idCoursecolumn.setCellValueFactory(new PropertyValueFactory<>("courseId"));
+        courseTable.getColumns().add(nameCoursecolumn);
+        courseTable.getColumns().add(idCoursecolumn);
+        courseTable.setItems(courses);
+
+        Button search = new Button("search");
+        search.setOnAction((var) -> setCourses());
+        profIdSearch = new TextField();
+        profIdSearch.setPromptText("search student");
+        body.add(search, 0,2);
+        body.add(profIdSearch,1,2);
+
+        Button refresh = new Button("refresh");
+        refresh.setOnAction((var) -> setData());
+        body.add(refresh,3,3);
+
+        VBox right = new VBox(profTable,courseTable);
         right.setSpacing(10);
         right.setAlignment(Pos.TOP_CENTER);
 
@@ -170,6 +193,40 @@ public class ProfessorsControl implements UIClass {
             System.out.println("[-] Error "+e);
             alert.setContentText("Error Can't add new course to professor!");
             alert.show();
+        }
+    }
+    private void setData() {
+        data.clear();
+        try {
+            Connection con = DataBase.getConnect();
+            String query = "SELECT * FROM Professor";
+            assert con != null;
+            Statement stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                data.add(new Professor(resultSet.getString(1), resultSet.getString(2)));
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println("Error " + e);
+        }
+    }
+    private void setCourses() {
+        data.clear();
+        String profIdSearch = this.profIdSearch.getText();
+        try {
+            Connection con = DataBase.getConnect();
+            String query = String.format("SELECT Course.ID_course, Course.Name FROM TEACHING JOIN Course ON TEACHING.ID_course = Course.ID_course WHERE TEACHING.ID_PROFESSOR    = '%s'",profIdSearch);
+            assert con != null;
+            Statement stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                courses.add(new Course(resultSet.getString(1), resultSet.getString(2)));
+            }
+            this.profIdSearch.setText("");
+            con.close();
+        } catch (Exception e) {
+            System.out.println("Error " + e);
         }
     }
     @Override
