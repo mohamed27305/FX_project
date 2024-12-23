@@ -14,4 +14,5 @@ module fx.finalproject {
     exports fx.finalproject.interfaces;
     opens fx.finalproject.interfaces to javafx.fxml;
     opens fx.finalproject.model to javafx.base;
+
 }
