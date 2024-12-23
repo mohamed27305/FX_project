@@ -78,6 +78,7 @@ public class CoursesControl implements UIClass {
         body.setAlignment(Pos.TOP_CENTER);
 
         Button back = new Button("Back");
+        back.setStyle("-fx-background-color:#AA2222;-fx-text-fill:#FFF;-fx-font-weight:900;-fx-boarder-radius:20;");
         VBox footer = new VBox(back);
         footer.setStyle("-fx-padding:10;");
         footer.setAlignment(Pos.BOTTOM_RIGHT);
