@@ -1,6 +1,7 @@
 package fx.finalproject.mainViews;
 
 import fx.finalproject.Navigator;
+import fx.finalproject.auth.Login;
 import fx.finalproject.interfaces.UIClass;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -44,6 +45,7 @@ public class Home implements UIClass {
         body.setAlignment(Pos.CENTER);
 
         Button logout = new Button("logout");
+        logout.setStyle("-fx-background-color:#AA2222;-fx-text-fill:#FFF;-fx-font-weight:900;-fx-boarder-radius:20;");
         VBox footer = new VBox(logout);
         footer.setStyle("-fx-padding:10;");
         footer.setAlignment(Pos.BOTTOM_RIGHT);
@@ -63,6 +65,8 @@ public class Home implements UIClass {
     public BorderPane getRoot(){return root;}
 
     private void backAction(){
+        System.out.println(Login.getUserName()+" Log out");
+        Login.setUserName("");
         navigator.navigateToLogin();
     }
 }

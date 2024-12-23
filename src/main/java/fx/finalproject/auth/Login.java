@@ -22,8 +22,15 @@ public class Login implements UIClass {
 
     private TextField email_F;
     private PasswordField password_F;
-    // endregion
-
+    private static String userName;
+    public static String getUserName(){return userName;}
+    public static void setUserName(String name){userName = name;}
+    private static String userEmail;
+    public static String getUserEmail(){return userEmail;}
+    public static void setUserEmail(String email){userEmail = email;}
+    private static String userPassword;
+    public static String getUserPassword(){return userPassword;}
+    public static void setUserPassword(String password){userPassword = password;}
     public Login(Navigator navigator){
         this.navigator = navigator;
         setRoot();
@@ -53,7 +60,6 @@ public class Login implements UIClass {
         password_F.setPromptText("Enter your password");
         body.addRow(2, password, password_F);
 
-        // region root nodes
         Button login = new Button("Login");
         login.setOnAction((var)-> loginAction());
 
@@ -78,28 +84,32 @@ public class Login implements UIClass {
         String password = password_F.getText();
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Authentication error");
-        if (Objects.equals(email, "")){
+        if (email.isBlank()){
             alert.setContentText("Email is required!");
             alert.show();
             return;
         }
-        if (Objects.equals(password, "")){
+        if (password.isBlank()){
             alert.setContentText("Password is required!");
             alert.show();
             return;
         }
         try {
             Connection con = DataBase.getConnect();
-            String query = "SELECT * FROM Admin WHERE Email = '" + email + "' AND Password = '" + password + "'";
+            String query = "SELECT Name FROM Admin WHERE Email = '" + email + "' AND Password = '" + password + "'";
             assert con != null;
             Statement stmt= con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if(rs.next()){
+                setUserName(rs.getString(1));
+                setUserEmail(email);
+                setUserPassword(password);
                 navigator.navigateToHome();
             }else{
                 alert.setContentText("Invalid email or password!");
                 alert.show();
             }
+            con.close();
         } catch (Exception e) {
             System.out.println("[-] Error "+e);
         }
