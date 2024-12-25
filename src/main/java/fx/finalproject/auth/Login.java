@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Objects;
 
 public class Login implements UIClass {
 
@@ -96,7 +95,7 @@ public class Login implements UIClass {
         }
         try {
             Connection con = DataBase.getConnect();
-            String query = String.format("select USERNAME from ADMIN where EMAIL= '%s' and PASSWORD= '%S' ",email ,password);
+            String query = String.format("select name from ADMIN where email= '%s' and PASSWORD= '%s' ",email ,password);
             System.out.println(query);
             assert con != null;
             Statement stmt= con.createStatement();
