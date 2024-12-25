@@ -54,7 +54,7 @@ public class Home implements UIClass {
         root.setCenter(body);
         root.setBottom(footer);
 
-        logout.setOnAction((var)-> backAction());
+        logout.setOnAction((var)-> logoutAction());
         studentsControl.setOnAction((var)-> navigator.navigateToStudentsControl());
         professorsControl.setOnAction((var)-> navigator.navigateToProfessorsControl());
         coursesControl.setOnAction((var)-> navigator.navigateToCourseControl());
@@ -64,9 +64,11 @@ public class Home implements UIClass {
     @Override
     public BorderPane getRoot(){return root;}
 
-    private void backAction(){
-        System.out.println(Login.getUserName()+" Log out");
+    private void logoutAction(){
+        System.out.println(Login.getUserName()+" Logged out");
         Login.setUserName("");
+        Login.setUserPassword("");
+        Login.setUserEmail("");
         navigator.navigateToLogin();
     }
 }

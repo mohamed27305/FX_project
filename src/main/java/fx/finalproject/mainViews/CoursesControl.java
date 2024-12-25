@@ -118,7 +118,7 @@ public class CoursesControl implements UIClass {
                 System.out.println("Changing Name");
                 try {
                     Connection con = DataBase.getConnect();
-                    String query = String.format("UPDATE Course SET Name = '%s' WHERE Id = '%s'",newName,id);
+                    String query = String.format("UPDATE Course SET Name = '%s' WHERE ID_course = '%s'",newName,id);
                     assert con != null;
                     Statement stmt= con.createStatement();
                     stmt.executeQuery(query);
@@ -190,10 +190,14 @@ public class CoursesControl implements UIClass {
         }
         try {
             Connection con = DataBase.getConnect();
-            String query = String.format("DELETE FROM Course WHERE Id = '%s'",courseId);
+            String query_1 = String.format("DELETE FROM ENROLLED WHERE ID_course = '%s'",courseId);
+            String query_2 = String.format("DELETE FROM Teaching WHERE ID_course = '%s'",courseId);
+            String query_3 = String.format("DELETE FROM Course WHERE ID_course = '%s'",courseId);
             assert con != null;
             Statement stmt= con.createStatement();
-            stmt.executeQuery(query);
+            stmt.executeQuery(query_1);
+            stmt.executeQuery(query_2);
+            stmt.executeQuery(query_3);
             con.close();
             this.courseId.setText("");
         } catch (Exception e) {

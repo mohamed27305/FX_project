@@ -98,7 +98,6 @@ public class AccountSetting implements UIClass {
         root.setTop(header);
         root.setCenter(body);
         root.setBottom(footer);
-        System.out.println(Login.getUserName());
         back.setOnAction((var) -> backAction());
         changeName.setOnAction((var) -> changeNameAction());
         changeEmail.setOnAction((var) -> changeEmailAction());

@@ -5,7 +5,6 @@ import fx.finalproject.Navigator;
 import fx.finalproject.interfaces.UIClass;
 import fx.finalproject.model.Course;
 import fx.finalproject.model.Professor;
-import fx.finalproject.model.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -22,11 +21,11 @@ import java.sql.Statement;
 public class ProfessorsControl implements UIClass {
     private final Navigator navigator;
     private BorderPane root;
-    TextField newprofId;
-    TextField newprofName;
+    TextField newProfId;
+    TextField newProfName;
     TextField profId;
     TextField courseId;
-    TextField removecourse;
+//    TextField removeCourse;
     TextField profIdSearch;
     TableView<Professor> profTable;
     ObservableList<Professor> data = FXCollections.observableArrayList();
@@ -56,16 +55,16 @@ public class ProfessorsControl implements UIClass {
 
         Button addProfessor = new Button("Add new professor");
         addProfessor.setOnAction((var) -> addProfessorAction());
-        newprofId = new TextField();
-        newprofId.setPromptText("professor id");
-        newprofName = new TextField();
-        newprofName.setPromptText("professor name");
+        newProfId = new TextField();
+        newProfId.setPromptText("professor id");
+        newProfName = new TextField();
+        newProfName.setPromptText("professor name");
         body.add(addProfessor, 0, 0);
-        body.add(newprofId, 1, 0);
-        body.add(newprofName, 2, 0);
+        body.add(newProfId, 1, 0);
+        body.add(newProfName, 2, 0);
 
         Button addCourse = new Button("add course");
-        addCourse.setOnAction((var)-> addCourse());
+        addCourse.setOnAction((var)-> addCourseToProfessorAction());
         courseId = new TextField();
         profId = new TextField();
         courseId.setPromptText("course Id");
@@ -82,25 +81,25 @@ public class ProfessorsControl implements UIClass {
         footer.setAlignment(Pos.BOTTOM_RIGHT);
 
         profTable = new TableView<>();
-        TableColumn<Professor, String> namecolumn = new TableColumn<>("professor name");
-        namecolumn.setCellValueFactory(new PropertyValueFactory<>("profName"));
-        TableColumn<Professor, String> idcolumn = new TableColumn<>("professor id");
-        idcolumn.setCellValueFactory(new PropertyValueFactory<>("profId"));
-        profTable.getColumns().add(namecolumn);
-        profTable.getColumns().add(idcolumn);
+        TableColumn<Professor, String> nameColumn = new TableColumn<>("professor name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("profName"));
+        TableColumn<Professor, String> idColumn = new TableColumn<>("professor id");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("profId"));
+        profTable.getColumns().add(nameColumn);
+        profTable.getColumns().add(idColumn);
         profTable.setItems(data);
 
         courseTable = new TableView<>();
-        TableColumn<Course, String> nameCoursecolumn = new TableColumn<>("course name");
-        nameCoursecolumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
-        TableColumn<Course, String> idCoursecolumn = new TableColumn<>("course id");
-        idCoursecolumn.setCellValueFactory(new PropertyValueFactory<>("courseId"));
-        courseTable.getColumns().add(nameCoursecolumn);
-        courseTable.getColumns().add(idCoursecolumn);
+        TableColumn<Course, String> nameCourseColumn = new TableColumn<>("course name");
+        nameCourseColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
+        TableColumn<Course, String> idCourseColumn = new TableColumn<>("course id");
+        idCourseColumn.setCellValueFactory(new PropertyValueFactory<>("courseId"));
+        courseTable.getColumns().add(nameCourseColumn);
+        courseTable.getColumns().add(idCourseColumn);
         courseTable.setItems(courses);
 
         Button search = new Button("search");
-        search.setOnAction((var) -> setCourses());
+        search.setOnAction((var) -> searchAction());
         profIdSearch = new TextField();
         profIdSearch.setPromptText("search student");
         body.add(search, 0,2);
@@ -120,8 +119,8 @@ public class ProfessorsControl implements UIClass {
     private void addProfessorAction() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        String profId = newprofId.getText();
-        String profName = newprofName.getText();
+        String profId = newProfId.getText();
+        String profName = newProfName.getText();
 
         if (profId.isBlank() || profId.isEmpty()) {
             alert.setContentText("student id is required!");
@@ -145,8 +144,8 @@ public class ProfessorsControl implements UIClass {
             alert.setTitle("Success");
             alert.setContentText("Added new professor!");
             alert.show();
-            newprofId.setText("");
-            newprofName.setText("");
+            newProfId.setText("");
+            newProfName.setText("");
             data.add(new Professor(profId, profName));
         } catch (Exception e) {
             System.out.println("[-] Error " + e);
@@ -154,8 +153,7 @@ public class ProfessorsControl implements UIClass {
             alert.show();
         }
     }
-    private void addCourse(){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void addCourseToProfessorAction(){
         alert.setTitle("Error");
         String profId = this.profId.getText();
         String courseId = this.courseId.getText();
@@ -207,7 +205,7 @@ public class ProfessorsControl implements UIClass {
             System.out.println("Error " + e);
         }
     }
-    private void setCourses() {
+    private void searchAction() {
         courses.clear();
         String profIdSearch = this.profIdSearch.getText();
         try {
@@ -219,7 +217,6 @@ public class ProfessorsControl implements UIClass {
             while (resultSet.next()) {
                 courses.add(new Course(resultSet.getString(1), resultSet.getString(2)));
             }
-            this.profIdSearch.setText("");
             con.close();
         } catch (Exception e) {
             System.out.println("Error " + e);

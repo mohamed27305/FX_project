@@ -17,18 +17,17 @@ import javafx.scene.layout.VBox;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.time.format.TextStyle;
 
 public class StudentsControl implements UIClass {
     private BorderPane root;
     private final Navigator navigator;
-    TextField newstudentId;
-    TextField newstudentName;
+    TextField newStudentId;
+    TextField newStudentName;
     TextField studentId;
     TextField studentIdRemove;
     TextField studentIdSearch;
     TextField courseId;
-    TextField removecourse;
+    TextField removeCourse;
     TableView<Student> studentTable;
     ObservableList<Student> data = FXCollections.observableArrayList();
     TableView<Course> courseTable;
@@ -39,8 +38,6 @@ public class StudentsControl implements UIClass {
         this.navigator = navigator;
         setRoot();
         setData();
-
-
     }
 
     private void setRoot() {
@@ -58,16 +55,16 @@ public class StudentsControl implements UIClass {
 
         Button addStudent = new Button("Add new Student");
         addStudent.setOnAction((var) -> addStudentAction());
-        newstudentId = new TextField();
-        newstudentId.setPromptText("student id");
-        newstudentName = new TextField();
-        newstudentName.setPromptText("student name");
+        newStudentId = new TextField();
+        newStudentId.setPromptText("student id");
+        newStudentName = new TextField();
+        newStudentName.setPromptText("student name");
         body.add(addStudent, 0, 0);
-        body.add(newstudentId, 1, 0);
-        body.add(newstudentName, 2, 0);
+        body.add(newStudentId, 1, 0);
+        body.add(newStudentName, 2, 0);
 
         Button addCourse = new Button("add course");
-        addCourse.setOnAction((var)-> addCourse());
+        addCourse.setOnAction((var)-> addCourseToStudentAction());
         courseId = new TextField();
         studentId = new TextField();
         courseId.setPromptText("course Id");
@@ -83,38 +80,38 @@ public class StudentsControl implements UIClass {
         footer.setAlignment(Pos.BOTTOM_RIGHT);
 
         studentTable = new TableView<>();
-        TableColumn<Student, String> namecolumn = new TableColumn<>("student name");
-        namecolumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
-        TableColumn<Student, String> idcolumn = new TableColumn<>("student id");
-        idcolumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
-        studentTable.getColumns().add(namecolumn);
-        studentTable.getColumns().add(idcolumn);
+        TableColumn<Student, String> nameColumn = new TableColumn<>("student name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+        TableColumn<Student, String> idColumn = new TableColumn<>("student id");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
+        studentTable.getColumns().add(nameColumn);
+        studentTable.getColumns().add(idColumn);
         studentTable.setItems(data);
 
         courseTable = new TableView<>();
-        TableColumn<Course, String> nameCoursecolumn = new TableColumn<>("course name");
-        nameCoursecolumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
-        TableColumn<Course, String> idCoursecolumn = new TableColumn<>("course id");
-        idCoursecolumn.setCellValueFactory(new PropertyValueFactory<>("courseId"));
-        courseTable.getColumns().add(nameCoursecolumn);
-        courseTable.getColumns().add(idCoursecolumn);
+        TableColumn<Course, String> nameCourseColumn = new TableColumn<>("course name");
+        nameCourseColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
+        TableColumn<Course, String> idCourseColumn = new TableColumn<>("course id");
+        idCourseColumn.setCellValueFactory(new PropertyValueFactory<>("courseId"));
+        courseTable.getColumns().add(nameCourseColumn);
+        courseTable.getColumns().add(idCourseColumn);
         courseTable.setItems(courses);
 
         Button search = new Button("search");
-        search.setOnAction((var) -> setCourses());
+        search.setOnAction((var) -> searchAction());
         studentIdSearch = new TextField();
         studentIdSearch.setPromptText("search student");
         body.add(search, 0,2);
         body.add(studentIdSearch,1,2);
 
         Button remove = new Button("remove");
-        remove.setOnAction((var) -> removecourse() );
-        removecourse = new TextField();
+        remove.setOnAction((var) -> removeCourseAction() );
+        removeCourse = new TextField();
         studentIdRemove = new TextField();
         studentIdRemove.setPromptText("student Id");
-        removecourse.setPromptText("course Id");
+        removeCourse.setPromptText("course Id");
         body.add(remove,0,3);
-        body.add(removecourse,1,3);
+        body.add(removeCourse,1,3);
         body.add(studentIdRemove,2,3);
 
 
@@ -140,8 +137,8 @@ public class StudentsControl implements UIClass {
     private void addStudentAction() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        String studentId = newstudentId.getText();
-        String studentName = newstudentName.getText();
+        String studentId = newStudentId.getText();
+        String studentName = newStudentName.getText();
 
         if (studentId.isBlank() || studentId.isEmpty()) {
             alert.setContentText("student id is required!");
@@ -165,8 +162,8 @@ public class StudentsControl implements UIClass {
             alert.setTitle("Success");
             alert.setContentText("Added new student!");
             alert.show();
-            newstudentId.setText("");
-            newstudentName.setText("");
+            newStudentId.setText("");
+            newStudentName.setText("");
             data.add(new Student(studentId, studentName));
         } catch (Exception e) {
             System.out.println("[-] Error " + e);
@@ -192,8 +189,7 @@ public class StudentsControl implements UIClass {
             System.out.println("Error " + e);
         }
     }
-    private void addCourse(){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void addCourseToStudentAction(){
         alert.setTitle("Error");
         String studentId = this.studentId.getText();
         String courseId = this.courseId.getText();
@@ -230,7 +226,7 @@ public class StudentsControl implements UIClass {
         }
     }
 
-    private void setCourses() {
+    private void searchAction() {
         courses.clear();
         String studentIdSearch = this.studentIdSearch.getText();
         try {
@@ -248,9 +244,9 @@ public class StudentsControl implements UIClass {
             System.out.println("Error " + e);
         }
     }
-    private void removecourse(){
+    private void removeCourseAction(){
         courses.clear();
-        String courseId = removecourse.getText();
+        String courseId = removeCourse.getText();
         String studentId = this.studentIdRemove.getText();
         try{
             Connection con = DataBase.getConnect();
@@ -262,7 +258,7 @@ public class StudentsControl implements UIClass {
                 courses.remove(new Course(resultSet.getString(1), resultSet.getString(2) ));
             }
             this.studentIdRemove.setText("");
-            this.removecourse.setText("");
+            this.removeCourse.setText("");
             con.close();
 
         }catch (Exception e){
