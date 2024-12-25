@@ -39,9 +39,8 @@ public class CoursesControl implements UIClass {
     private void setRoot() {
         root = new BorderPane();
         Label title = new Label("Course Control Panel");
-        title.setStyle("-fx-font-weight:900;-fx-text-fill: #fff;-fx-padding:10px;-fx-font-size:25;");  // Inline CSS
         VBox header = new VBox(title);
-        header.setStyle("-fx-background-color:blue;");
+        header.setId("header");
         header.setAlignment(Pos.CENTER);
 
         GridPane body = new GridPane();
@@ -78,9 +77,9 @@ public class CoursesControl implements UIClass {
         body.setAlignment(Pos.TOP_CENTER);
 
         Button back = new Button("Back");
-        back.setStyle("-fx-background-color:#AA2222;-fx-text-fill:#FFF;-fx-font-weight:900;-fx-boarder-radius:20;");
+        back.setId("back");
         VBox footer = new VBox(back);
-        footer.setStyle("-fx-padding:10;");
+        footer.setId("footer");
         footer.setAlignment(Pos.BOTTOM_RIGHT);
 
         courseTable = new TableView<>();

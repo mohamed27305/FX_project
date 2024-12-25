@@ -1,0 +1,40 @@
+#header{
+    -fx-background-color: rgb(12, 12, 138);;
+    -fx-font-weight:900;
+    -fx-padding:10px;
+    -fx-font-size:25;
+}
+#header *{
+    -fx-text-fill: #fff;
+}
+#link{
+    -fx-underline: true;
+}
+#footer{
+    -fx-padding:10;
+}
+#back, #logout, #deleteAccount{
+    -fx-background-color:#AA2222;
+    -fx-min-width: 80px;
+}
+#title{
+    -fx-font-weight:900;
+    -fx-text-fill: rgb(12, 12, 138);
+    -fx-padding:30px;
+    -fx-font-size:25;
+}
+#Home Button{
+    -fx-min-width: 200px;
+}
+Button{
+    -fx-text-fill: #fff;
+    -fx-font-weight:900;
+    -fx-background-color: rgb(12, 12, 138);
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 0px;
+    -fx-padding:8px;
+    -fx-min-width: 120px;
+
+}

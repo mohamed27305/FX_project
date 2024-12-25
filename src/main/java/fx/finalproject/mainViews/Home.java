@@ -21,20 +21,16 @@ public class Home implements UIClass {
     private void setRoot(){
         root = new BorderPane();
         Label title = new Label("Welcome To The Control Panel");
-        title.setStyle("-fx-font-weight:900;-fx-text-fill: #fff;-fx-padding:10px;-fx-font-size:25;");  // Inline CSS
         VBox header = new VBox(title);
-        header.setStyle("-fx-background-color:blue;");
+        header.setId("header");
         header.setAlignment(Pos.CENTER);
 
         GridPane body = new GridPane();
+        body.setId("Home");
         Button studentsControl = new Button("Students Control");
         Button professorsControl = new Button("Professors Control");
         Button coursesControl = new Button("Course Control");
         Button accountsSetting = new Button("Account Setting");
-        studentsControl.setMinWidth(200);
-        professorsControl.setMinWidth(200);
-        coursesControl.setMinWidth(200);
-        accountsSetting.setMinWidth(200);
         body.addRow(0,studentsControl);
         body.addRow(1,professorsControl);
         body.addRow(2,coursesControl);
@@ -45,9 +41,9 @@ public class Home implements UIClass {
         body.setAlignment(Pos.CENTER);
 
         Button logout = new Button("logout");
-        logout.setStyle("-fx-background-color:#AA2222;-fx-text-fill:#FFF;-fx-font-weight:900;-fx-boarder-radius:20;");
+        logout.setId("logout");
         VBox footer = new VBox(logout);
-        footer.setStyle("-fx-padding:10;");
+        footer.setId("footer");
         footer.setAlignment(Pos.BOTTOM_RIGHT);
 
         root.setTop(header);
