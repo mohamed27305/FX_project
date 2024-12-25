@@ -96,7 +96,8 @@ public class Login implements UIClass {
         }
         try {
             Connection con = DataBase.getConnect();
-            String query = "SELECT Name FROM Admin WHERE Email = '" + email + "' AND Password = '" + password + "'";
+            String query = String.format("select USERNAME from ADMIN where EMAIL= '%s' and PASSWORD= '%S' ",email ,password);
+            System.out.println(query);
             assert con != null;
             Statement stmt= con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
