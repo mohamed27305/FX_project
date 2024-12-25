@@ -106,10 +106,6 @@ public class ProfessorsControl implements UIClass {
         body.add(search, 0,2);
         body.add(profIdSearch,1,2);
 
-        Button refresh = new Button("refresh");
-        refresh.setOnAction((var) -> setData());
-        body.add(refresh,3,3);
-
         VBox right = new VBox(profTable,courseTable);
         right.setSpacing(10);
         right.setAlignment(Pos.TOP_CENTER);
@@ -212,7 +208,7 @@ public class ProfessorsControl implements UIClass {
         }
     }
     private void setCourses() {
-        data.clear();
+        courses.clear();
         String profIdSearch = this.profIdSearch.getText();
         try {
             Connection con = DataBase.getConnect();
