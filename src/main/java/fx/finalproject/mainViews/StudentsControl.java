@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.format.TextStyle;
 
 public class StudentsControl implements UIClass {
     private BorderPane root;
@@ -24,6 +25,7 @@ public class StudentsControl implements UIClass {
     TextField newstudentId;
     TextField newstudentName;
     TextField studentId;
+    TextField studentIdRemove;
     TextField studentIdSearch;
     TextField courseId;
     TextField removecourse;
@@ -105,9 +107,16 @@ public class StudentsControl implements UIClass {
         body.add(search, 0,2);
         body.add(studentIdSearch,1,2);
 
-        Button refresh = new Button("refresh");
-        refresh.setOnAction((var) -> setData());
-        body.add(refresh,3,3);
+        Button remove = new Button("remove");
+        remove.setOnAction((var) -> removecourse() );
+        removecourse = new TextField();
+        studentIdRemove = new TextField();
+        studentIdRemove.setPromptText("student Id");
+        removecourse.setPromptText("course Id");
+        body.add(remove,0,3);
+        body.add(removecourse,1,3);
+        body.add(studentIdRemove,2,3);
+
 
 
         VBox right = new VBox(studentTable,courseTable);
@@ -222,7 +231,7 @@ public class StudentsControl implements UIClass {
     }
 
     private void setCourses() {
-        data.clear();
+        courses.clear();
         String studentIdSearch = this.studentIdSearch.getText();
         try {
             Connection con = DataBase.getConnect();
@@ -239,6 +248,28 @@ public class StudentsControl implements UIClass {
             System.out.println("Error " + e);
         }
     }
+    private void removecourse(){
+        courses.clear();
+        String courseId = removecourse.getText();
+        String studentId = this.studentIdRemove.getText();
+        try{
+            Connection con = DataBase.getConnect();
+            String query = String.format("delete from enrolled where ID_COURSE='%s' And ID_student='%s'",courseId, studentId);
+            assert con != null;
+            Statement stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(query);
+            while(resultSet.next()){
+                courses.remove(new Course(resultSet.getString(1), resultSet.getString(2) ));
+            }
+            this.studentIdRemove.setText("");
+            this.removecourse.setText("");
+            con.close();
+
+        }catch (Exception e){
+            System.out.println("Error " + e);
+        }
+    }
+
     private void backAction() {
         navigator.navigateToHome();
     }
