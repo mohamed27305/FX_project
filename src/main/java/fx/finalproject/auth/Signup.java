@@ -41,7 +41,7 @@ public class Signup implements UIClass {
     private void setRoot(){
         root = new BorderPane();
         Label title = new Label("System Signup");
-        title.setStyle("-fx-font-weight:900;-fx-text-fill: #00a;-fx-padding:30px;-fx-font-size:25;");  // Inline CSS
+        title.setId("title");
         VBox header = new VBox(title);
         header.setAlignment(Pos.CENTER);
         VBox.setVgrow(title, Priority.ALWAYS);
@@ -72,6 +72,7 @@ public class Signup implements UIClass {
         body.add(signup,1,5);
 
         Label already_have_an_account = new Label("already have an account?");
+        already_have_an_account.setId("link");
         already_have_an_account.setOnMouseClicked((var)-> navigator.navigateToLogin());
         body.add(already_have_an_account,1,6);
 

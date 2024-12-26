@@ -35,9 +35,8 @@ public class AccountSetting implements UIClass {
     private void setRoot() {
         root = new BorderPane();
         Label title = new Label("Account Setting");
-        title.setStyle("-fx-font-weight:900;-fx-text-fill: #fff;-fx-padding:10px;-fx-font-size:25;");  // Inline CSS
         VBox header = new VBox(title);
-        header.setStyle("-fx-background-color:blue;");
+        header.setId("header");
         header.setAlignment(Pos.CENTER);
 
         GridPane body = new GridPane();
@@ -81,7 +80,7 @@ public class AccountSetting implements UIClass {
         body.add(l2,0,9,2,2);
         Button deleteAccount = new Button("Delete my account");
         deleteAccount.setMinWidth(200);
-        deleteAccount.setStyle("-fx-background-color:#AA2222;-fx-text-fill:#FFF;-fx-font-weight:900;-fx-boarder-radius:20;");
+        deleteAccount.setId("deleteAccount");
         deleteAccount.setOnAction((var)->deleteAccountAction());
         body.add(deleteAccount,0,11,2,2);
 
@@ -91,9 +90,9 @@ public class AccountSetting implements UIClass {
         body.setAlignment(Pos.CENTER);
 
         Button back = new Button("Back");
+        back.setId("back");
         VBox footer = new VBox(back);
-        back.setStyle("-fx-background-color:#AA2222;-fx-text-fill:#FFF;-fx-font-weight:900;-fx-boarder-radius:20;");
-        footer.setStyle("-fx-padding:10;");
+        footer.setId("footer");
         footer.setAlignment(Pos.BOTTOM_RIGHT);
         root.setTop(header);
         root.setCenter(body);
@@ -111,6 +110,8 @@ public class AccountSetting implements UIClass {
     private void changeNameAction() {
         String name = newName.getText();
         if (name.isBlank()){
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.getButtonTypes().setAll(ButtonType.OK);
             alert.setTitle("Missing field");
             alert.setContentText("new name is required");
             alert.show();
@@ -130,6 +131,8 @@ public class AccountSetting implements UIClass {
                 con.close();
             }
         } catch (Exception e) {
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.getButtonTypes().setAll(ButtonType.OK);
             alert.setTitle("Error");
             alert.setContentText("Invalid new name!");
             alert.show();
@@ -140,6 +143,8 @@ public class AccountSetting implements UIClass {
     private void changeEmailAction() {
         String email = newEmail.getText();
         if (email.isBlank()){
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.getButtonTypes().setAll(ButtonType.OK);
             alert.setTitle("Missing field");
             alert.setContentText("new email is required");
             alert.show();
@@ -159,6 +164,8 @@ public class AccountSetting implements UIClass {
                 con.close();
             }
         } catch (Exception e) {
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.getButtonTypes().setAll(ButtonType.OK);
             alert.setTitle("Error");
             alert.setContentText("Invalid new email!");
             alert.show();
@@ -168,6 +175,8 @@ public class AccountSetting implements UIClass {
     private void changePasswordAction() {
         String password = newPassword.getText();
         if (password.isBlank()){
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.getButtonTypes().setAll(ButtonType.OK);
             alert.setTitle("Missing field");
             alert.setContentText("new password is required");
             alert.show();
@@ -187,6 +196,8 @@ public class AccountSetting implements UIClass {
                 con.close();
             }
         } catch (Exception e) {
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.getButtonTypes().setAll(ButtonType.OK);
             alert.setTitle("Error");
             alert.setContentText("Invalid new password!");
             alert.show();
